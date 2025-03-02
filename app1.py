@@ -45,7 +45,17 @@ if uploaded_file:
             st.pyplot(fig)
         else:
             st.warning(f"Column '{criterion}' not found in the uploaded file.")
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png",bbox_inches="tight", pad_inches=0.5)
+        buf.seek(0)
             
+    
+        st.download_button(
+        label="Download Chart as Image",
+        data=buf,
+        file_name=f"{option_grade}_{criterion}.png",
+        mime="image/png",
+        key=f"download_{criterion}")
       
     final_column = df.iloc[:, 10]
     grade_counts = final_column.value_counts()
@@ -53,16 +63,16 @@ if uploaded_file:
     ax.pie(grade_counts, labels=grade_counts.index, autopct='%1.1f%%', startangle=140)
     ax.set_title(f"{option_grade} Distribution for Final Level of achievement")
     st.pyplot(fig)
+    
     buf = io.BytesIO()
     fig.savefig(buf, format="png",bbox_inches="tight", pad_inches=0.5)
     buf.seek(0)
-            
-    
     st.download_button(
     label="Download Chart as Image",
     data=buf,
     file_name=f"{option_grade}_{criterion}.png",
-    mime="image/png"
+    mime="image/png",
+    key="download_final"
     )
             
    
